@@ -6,15 +6,17 @@ $a = "car-db.csv";
 if(file_exists($a)) {
     $myfile = fopen("car-db.csv", "r");
     fgetcsv($myfile);
-    $b = "";
+    $b = null;
     $model = [];
     $make = [];
     $q = "";
     for($i = 0; $i < 70824; $i++) {
         $z = fgetcsv($myfile);
-        if($z[1] != $b) {
-            array_push($cars, $model);
-            array_push($make, $q);
+        if($z[1] != $b && !is_null($b)) {
+            //array_push($cars, $model);
+            //array_push($make, $q);
+            $cars[] = $model;
+            $make[] = $q;
         }
         if($z[1] != $b) {
             $model = [];
@@ -34,7 +36,12 @@ if(file_exists($a)) {
         echo "\n\n\n";
     }
     */
-    print_r($cars);
+    fclose($myfile);
+    echo "\n\n\n\n\n\n\n";
+    //print_r($cars);
+    
+    
     print_r($make);
+    echo $cars[0][0];
 }
 ?>
