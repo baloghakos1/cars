@@ -12,18 +12,24 @@ if(file_exists($a)) {
     $q = "";
     for($i = 0; $i < 70824; $i++) {
         $z = fgetcsv($myfile);
-        if($z[1] != $b && !is_null($b)) {
-            //array_push($cars, $model);
-            //array_push($make, $q);
+        if($z) {
+            if(($z[1] != $b) && !is_null($b)) {
+                //array_push($cars, $model);
+                //array_push($make, $q);
+                $cars[] = $model;
+                $make[] = $q;
+            }
+            if($z[1] != $b) {
+                $model = [];
+                $q = $z[1];
+            }
+            array_push($model, $z[2]);
+            $b = $z[1];
+        }
+        else {
             $cars[] = $model;
             $make[] = $q;
         }
-        if($z[1] != $b) {
-            $model = [];
-            $q = $z[1];
-        }
-        array_push($model, $z[2]);
-        $b = $z[1];
     }
     /*
     for($i = 1; $i < count($make); $i++) {
@@ -37,13 +43,10 @@ if(file_exists($a)) {
     }
     */
     fclose($myfile);
-    echo "\n\n\n\n\n\n\n";
+    echo "\n";
     //print_r($cars);
-    
-    
     //print_r($make);
-
-    print_r(GetMakers());
+    //print_r(GetMakers());
 }
 
 function GetMakers() {
@@ -54,16 +57,35 @@ function GetMakers() {
     $q = "";
     for($i = 0; $i < 70824; $i++) {
         $z = fgetcsv($a);
-        if($z[1] != $b && !is_null($b)) {
-        $make[] = $q;
+        if($z) {
+            if($z[1] != $b && !is_null($b)) {
+                $make[] = $q;
+            }
+            if($z[1] != $b) {
+                $q = $z[1];
+            }
+            $b = $z[1];
         }
-        if($z[1] != $b) {
-        $q = $z[1];
+        else {
+            $make[] = $q;
         }
-        $b = $z[1];
+        
     }
     fclose($a);
     return $make;
 }
 
+$mysqli = new mysqli("localhost","root",null,"cars");
+if ($mysqli -> connect_errno) {
+    echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
+    exit();
+}
+$makers = GetMakers();
+echo "connected";
+$mysqli->query("TRUNCATE TABLE makers");
+foreach($makers as $maker) {
+    $mysqli->query("INSERT INTO makers (name) Values ('$maker')");
+    echo "$maker\n";
+}
+$mysqli->close();
 ?>
