@@ -41,7 +41,29 @@ if(file_exists($a)) {
     //print_r($cars);
     
     
-    print_r($make);
-    echo $cars[0][0];
+    //print_r($make);
+
+    print_r(GetMakers());
 }
+
+function GetMakers() {
+    $a = fopen("car-db.csv", "r");
+    fgetcsv($a);
+    $b = null;
+    $make = [];
+    $q = "";
+    for($i = 0; $i < 70824; $i++) {
+        $z = fgetcsv($a);
+        if($z[1] != $b && !is_null($b)) {
+        $make[] = $q;
+        }
+        if($z[1] != $b) {
+        $q = $z[1];
+        }
+        $b = $z[1];
+    }
+    fclose($a);
+    return $make;
+}
+
 ?>
