@@ -23,6 +23,7 @@ if(file_exists($a)) {
         array_push($model, $z[2]);
         $b = $z[1];
     }
+    /*
     for($i = 1; $i < count($make); $i++) {
         echo $make[$i];
         echo ": ";
@@ -32,5 +33,8 @@ if(file_exists($a)) {
         }
         echo "\n\n\n";
     }
+    */
+    print_r($cars);
+    print_r($make);
 }
 ?>
