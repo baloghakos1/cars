@@ -37,7 +37,7 @@ class MakerDbTools {
         return $maker;
     }
     
-    function getMaker($mysqli, $id) {
+    function getMaker($id) {
         $result = $this->mysqli->query("SELECT * FROM makers Where id=$id");
         $maker = $result->fetch_assoc();
     

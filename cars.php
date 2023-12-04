@@ -69,13 +69,11 @@ function GetMakers() {
 $makerDbTool = new MakerDbTools();
 $makers = GetMakers();
 echo "connected\n";
-/*
-$mysqli->query("TRUNCATE TABLE makers");
+
 foreach($makers as $maker) {
-    //$mysqli->query("INSERT INTO makers (name) Values ('$maker')");
     echo "$maker\n";
 }
-*/
+
 $makerDbTool->insertMakers($makers,true);
 
 $makers = $makerDbTool->getAllMakers();
