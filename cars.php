@@ -84,7 +84,7 @@ insertMakers($mysqli,$makers,true);
 $makers = getAllMakers($mysqli);
 $cnt = count($makers);
 echo "$cnt sor van;\n";
-echo $cnt . "sor van;\n";
+echo $cnt . " sor van;\n";
 echo sprintf("%d sor van;\n", $cnt);
 $mysqli->close();
 ?>
