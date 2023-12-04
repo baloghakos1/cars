@@ -10,6 +10,13 @@ function insertMakers($mysqli, $makers, $truncate = false) {
 }
 
 function updateMakers($mysqli, $data) {
-    $result = $mysqli;
+    $result = $mysqli->query("UPDATE makers SET {$data['name']}");
+
+    if (!$result) {
+        echo "Hiba történt a $maker beszúrása közben";
+        return $result;
+    }
+
+    return $result;
 }
 ?>
