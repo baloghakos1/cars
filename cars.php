@@ -70,7 +70,7 @@ if ($mysqli -> connect_errno) {
     exit();
 }
 $makers = GetMakers();
-echo "connected";
+echo "connected\n";
 $mysqli->query("TRUNCATE TABLE makers");
 foreach($makers as $maker) {
     $mysqli->query("INSERT INTO makers (name) Values ('$maker')");
