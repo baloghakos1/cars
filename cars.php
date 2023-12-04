@@ -1,4 +1,6 @@
 <?php
+require_once 'db-tools.php';
+require_once 'MakerDbTools.php';
 $cars = [
 
 ];
@@ -64,17 +66,21 @@ function GetMakers() {
     return $make;
 }
 
-$mysqli = new mysqli("localhost","root",null,"cars");
-if ($mysqli -> connect_errno) {
-    echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
-    exit();
-}
+$makerDbTool = new MakerDbTools();
 $makers = GetMakers();
 echo "connected\n";
+/*
 $mysqli->query("TRUNCATE TABLE makers");
 foreach($makers as $maker) {
-    $mysqli->query("INSERT INTO makers (name) Values ('$maker')");
+    //$mysqli->query("INSERT INTO makers (name) Values ('$maker')");
     echo "$maker\n";
 }
-$mysqli->close();
+*/
+$makerDbTool->insertMakers($makers,true);
+
+$makers = $makerDbTool->getAllMakers();
+$cnt = count($makers);
+echo "$cnt sor van;\n";
+echo $cnt . " sor van;\n";
+echo sprintf("%d sor van;\n", $cnt);
 ?>

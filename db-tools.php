@@ -43,5 +43,13 @@ function delMaker($mysqli, $id) {
     return $result;
 }
 
+function getAllMakers($mysqli) {
+    $result = $mysqli->query("SELECT * FROM makers");
+    $makers = $result->fetch_all(MYSQLI_ASSOC);
+    $result->free_result();
+
+    return $makers;
+}
+
 
 ?>
