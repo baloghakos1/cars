@@ -19,4 +19,8 @@ function updateMakers($mysqli, $data) {
 
     return $result;
 }
+
+function getMaker($mysqli, $id) {
+    
+}
 ?>
