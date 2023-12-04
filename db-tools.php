@@ -8,4 +8,8 @@ function insertMakers($mysqli, $makers, $truncate = false) {
     }
     return $result;
 }
+
+function updateMakers($mysqli, $data) {
+    $result = $mysqli;
+}
 ?>
