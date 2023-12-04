@@ -31,17 +31,6 @@ if(file_exists($a)) {
             $make[] = $q;
         }
     }
-    /*
-    for($i = 1; $i < count($make); $i++) {
-        echo $make[$i];
-        echo ": ";
-        for($j = 0; $j < count($cars[$i]); $j++) {
-            echo " ";
-            echo $cars[$i][$j];
-        }
-        echo "\n\n\n";
-    }
-    */
     fclose($myfile);
     echo "\n";
     //print_r($cars);
