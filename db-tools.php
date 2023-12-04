@@ -8,4 +8,19 @@ function insertMakers($mysqli, $makers, $truncate = false) {
     }
     return $result;
 }
+
+function updateMakers($mysqli, $data) {
+    $result = $mysqli->query("UPDATE makers SET {$data['name']}");
+
+    if (!$result) {
+        echo "Hiba történt a $maker beszúrása közben";
+        return $result;
+    }
+
+    return $result;
+}
+
+function getMaker($mysqli, $id) {
+    
+}
 ?>
