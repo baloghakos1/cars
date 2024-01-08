@@ -1,84 +1,83 @@
 <?php
-require_once 'db-tools.php';
-require_once 'MakerDbTools.php';
-$cars = [
+ini_set('memory_limit','-1');
+$array = [];
 
-];
-$a = "car-db.csv";
-if(file_exists($a)) {
-    $myfile = fopen("car-db.csv", "r");
-    fgetcsv($myfile);
-    $b = null;
-    $model = [];
-    $make = [];
-    $q = "";
-    for($i = 0; $i < 70824; $i++) {
-        $z = fgetcsv($myfile);
-        if($z) {
-            if(($z[1] != $b) && !is_null($b)) {
-                //array_push($cars, $model);
-                //array_push($make, $q);
-                $cars[] = $model;
-                $make[] = $q;
-            }
-            if($z[1] != $b) {
-                $model = [];
-                $q = $z[1];
-            }
-            array_push($model, $z[2]);
-            $b = $z[1];
-        }
-        else {
-            $cars[] = $model;
-            $make[] = $q;
-        }
+$file = "car-db.csv";
+function getCsvData($file){
+    if(!file_exists($file)){
+        echo "$file nem található";
+        return false;
     }
-    fclose($myfile);
-    echo "\n";
-    //print_r($cars);
-    //print_r($make);
-    //print_r(GetMakers());
+    $csv = fopen($file, 'r');
+    while (!feof($csv)) {
+        $line = fgetcsv($csv);
+        $array[] = $line;
+    }
+    fclose($csv);
+    return $array ;    
 }
 
-function GetMakers() {
-    $a = fopen("car-db.csv", "r");
-    fgetcsv($a);
-    $b = null;
-    $make = [];
-    $q = "";
-    for($i = 0; $i < 70824; $i++) {
-        $z = fgetcsv($a);
-        if($z) {
-            if($z[1] != $b && !is_null($b)) {
-                $make[] = $q;
-            }
-            if($z[1] != $b) {
-                $q = $z[1];
-            }
-            $b = $z[1];
-        }
-        else {
-            $make[] = $q;
-        }
-        
+function insertMakers($mysqli, $makers, $truncate = false){
+    if($truncate) {
+        $mysqli->query("TRUNCATE TABLE makers");
     }
-    fclose($a);
-    return $make;
+    foreach ($makers as $maker) {
+        $result = $mysqli->query("INSERT INTO makers (name) VALUES ('$maker')");
+    }
+    if (!$result){
+        echo "Hiba történt a $maker beszúrása közben";
+    }
+    return $result;
 }
 
-$makerDbTool = new MakerDbTools();
-$makers = GetMakers();
+$csvData = getCsvData($file);
+//print_r($csvData);
+
+//$sv = count($csvData);
+function getMakers($csvData){
+    $header = $csvData[0];
+    $makerKey = array_search('make',$header);
+    //$modelKey = array_search('model',$header);
+
+    $maker ="";
+    //$model = "";
+    $isHeader = true;
+    $makers = [];
+    //$result = [];
+
+    foreach ($csvData as $data) {
+        if (!is_array($data)){
+            continue;
+        }
+        if ($isHeader) {
+            $isHeader = false;
+            continue;
+        }
+        if ($maker != $data[$makerKey]) {
+            $maker = $data[$makerKey];
+            $makers[] = $maker;
+        }
+        /*
+        if ($model != $data[$modelKey]) {
+            $model = $data[$modelKey ];
+            $result[$maker][] = $model;
+        }
+        */
+    }
+    return $makers;
+}
+
+$mysqli = new mysqli("localhost","root",null,"cars");
+
+//Check connection
+if($mysqli->connect_errno) {
+    echo "Failed to connect to MySql: " . $mysqli -> connect_error;
+    exit();
+}
 echo "connected\n";
 
-foreach($makers as $maker) {
-    echo "$maker\n";
-}
+$makers = getMakers($csvData);
 
-$makerDbTool->insertMakers($makers,true);
+$result = insertMakers($mysqli, $makers, true);
 
-$makers = $makerDbTool->getAllMakers();
-$cnt = count($makers);
-echo "$cnt sor van;\n";
-echo $cnt . " sor van;\n";
-echo sprintf("%d sor van;\n", $cnt);
-?>
+$mysqli->close();
