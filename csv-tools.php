@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+require_once("dbmaker.php");
 function getCsvData($fileName) {
 	if (!file_exists($fileName)) {
 		echo "$fileName nem taláható";
@@ -36,4 +38,35 @@ function getMakers($csvData)
     }
 
     return $makers;
+}
+
+function getModels($csvData)
+{
+    $idxMaker = array_search('make', $csvData[0]);
+    $idxModel = array_search('model', $csvData[0]);
+    $models = [];
+    $isHeader = true;
+    foreach ($csvData as $data) {
+        if (!is_array($data)) {
+            continue;
+        }
+        if ($isHeader) {
+            $isHeader = false;
+            continue;
+        }
+        $dbMaker = new DBMaker($data);
+
+        $maker = $dbMaker->getByName($data[$idxMaker]);
+        $idxMaker = $maker['id'];
+        $makerName = $maker['name'];
+        $model = [
+            'name'=> $data[$idxModel],
+            'id_make' => $maker['id']
+        ];
+        if (!in_array($model, $models)) {
+            $models[] = $model;
+        }
+    }
+
+    return $models;
 }

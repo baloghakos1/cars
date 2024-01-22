@@ -123,17 +123,39 @@ class Page
         ';
     }
 
-    static function showExportImportButtons($isEmptyDb)
+    static function showExportImportButtons($isEmptyDb, $makers, $selectedMakerId)
     {
         echo '<div style="display: flex">';
         if (!$isEmptyDb) {
             self::showExportBtn();
             self::showTruncateBtn();
+            self::showMakersFilter($makers, $selectedMakerId);
         }
         else {
             self::showImportBtn();
         }
         echo '</div><br>';
         self::showCsvImport();
+    }
+
+    static function showMakersFilter(array $makers, ?int $selectedMakerId = 0) {
+        echo '<form method="post" action="">';
+        self::showMakersDropdown($makers, $selectedMakerId);
+        echo '<button type="submit" id="btn-filter" name="btn-filter"
+            title="Gyártó kiválasztása">
+            <i class="fa fa-filter"></i>$nbsp;Kiválaszt</button>';
+        echo '</form>';
+    }
+
+    static function showMakersDropdown(array $makers) 
+    {
+        $result = '<select id="makers-dropdown" name="makers-dropdown">';
+        foreach ($makers as $maker) {
+            $result .= sprintf('<option value ="%s">%s</option>', $maker['id'], $maker['name']);
+
+        }
+        $result .= '</select>';
+        echo $result;
+
     }
 }

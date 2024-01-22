@@ -67,6 +67,41 @@ function getMakers($csvData){
     return $makers;
 }
 
+
+function getModels($csvData){
+    $header = $csvData[0];
+    $makerKey = array_search('make',$header);
+    $modelKey = array_search('model',$header);
+
+    $maker ="";
+    $model = "";
+    $isHeader = true;
+    $makers = [];
+    $result = [];
+
+    foreach ($csvData as $data) {
+        if (!is_array($data)){
+            continue;
+        }
+        if ($isHeader) {
+            $isHeader = false;
+            continue;
+        }
+        
+        if ($maker != $data[$makerKey]) {
+            $maker = $data[$makerKey];
+            $makers[] = $maker;
+        }
+        
+        if ($model != $data[$modelKey]) {
+            $model = $data[$modelKey ];
+            $result[$maker][] = $model;
+        }
+        
+    }
+    return $result;
+}
+
 $mysqli = new mysqli("localhost","root",null,"cars");
 
 //Check connection
