@@ -147,11 +147,17 @@ class Page
         echo '</form>';
     }
 
-    static function showMakersDropdown(array $makers) 
+    static function showMakersDropdown(array $makers, ?int $selectedMakerId = 0) 
     {
         $result = '<select id="makers-dropdown" name="makers-dropdown">';
         foreach ($makers as $maker) {
-            $result .= sprintf('<option value ="%s">%s</option>', $maker['id'], $maker['name']);
+            if  ($selectedMakerId == $maker['id']) {
+                $result .= ('<option value = ' . $maker['id'] . '"selected>' . $maker['id'] . $maker['name'] . '</option>');
+            }
+            else {
+                $result .= '<option value ';
+            }
+            
 
         }
         $result .= '</select>';
